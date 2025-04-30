@@ -1,0 +1,6 @@
+out/
+.bsp/
+.metals/
+.scala-build/
+.vscode/
+.mill-version
