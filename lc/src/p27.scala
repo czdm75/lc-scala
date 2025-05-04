@@ -11,7 +11,6 @@ object Solution {
 
     def removeElement(nums: Array[Int], `val`: Int): Int = {
         tailrecM((0, nums.length)) { case (start, end) =>
-            println(s"start=$start, end=$end")
             if (start == end) {
                 Right(start)
             } else if (nums(start) == `val`) {
