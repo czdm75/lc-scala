@@ -4,3 +4,4 @@ out/
 .scala-build/
 .vscode/
 .mill-version
+.bloop/
