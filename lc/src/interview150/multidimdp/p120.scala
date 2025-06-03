@@ -6,7 +6,7 @@ object Solution {
       .foldLeft(triangle.head) { case (sums, row) =>
         val left = (sums zip row).map{ case (x, y) => x + y }
         val right = (sums zip row.tail).map{ case (x, y) => x + y }
-        (Int.maxValue :: right).zipAll(left, Int.maxValue, Int.maxValue)
+        (Int.MaxValue :: right).zipAll(left, Int.MaxValue, Int.MaxValue)
           .map((math.min _).tupled)
       }.min
   }
