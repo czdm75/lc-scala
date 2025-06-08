@@ -14,10 +14,9 @@ object Solution {
       prod * elem
     }
 
-    nums.reverseIterator.foldLeft((1, nums.length - 1)) {
-      case ((prod, idx), elem) =>
-        result(idx) *= prod
-        (prod * elem, idx - 1)
+    nums.reverseIterator.foldLeft((1, nums.length - 1)) { case ((prod, idx), elem) =>
+      result(idx) *= prod
+      (prod * elem, idx - 1)
     }
 
     result

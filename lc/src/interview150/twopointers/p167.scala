@@ -13,7 +13,7 @@ object Solution {
     tailrecM((0, numbers.length - 1)) {
       case (p1, p2) if numbers(p1) + numbers(p2) > target => Left((p1, p2 - 1))
       case (p1, p2) if numbers(p1) + numbers(p2) < target => Left((p1 + 1, p2))
-      case (p1, p2) => Right(Array(p1 + 1, p2 + 1))
+      case (p1, p2)                                       => Right(Array(p1 + 1, p2 + 1))
     }
   }
 

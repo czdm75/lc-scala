@@ -7,7 +7,7 @@ object Solution {
 
     val inserted = if (smallerCnt + largerCnt == intervals.size) {
       // no overlap
-        newInterval
+      newInterval
     } else {
       val from = math.min(newInterval.head, intervals(smallerCnt).head)
       val to = math.max(newInterval.last, intervals(intervals.size - largerCnt - 1).last)

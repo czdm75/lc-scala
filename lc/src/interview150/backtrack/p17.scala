@@ -15,11 +15,13 @@ object Solution {
       '0' -> ""
     )
 
-    digits.foldLeft(List("")) { case (prefixes, chars) =>
-      for {
-        p <- prefixes
-        c <- mapping(chars)
-      } yield p :+ c
-    }.filterNot(_.isEmpty)
+    digits
+      .foldLeft(List("")) { case (prefixes, chars) =>
+        for {
+          p <- prefixes
+          c <- mapping(chars)
+        } yield p :+ c
+      }
+      .filterNot(_.isEmpty)
   }
 }

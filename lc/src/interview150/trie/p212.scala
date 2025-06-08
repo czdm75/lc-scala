@@ -58,29 +58,30 @@ object Solution {
     import scala.annotation.tailrec
 
     @tailrec
-    def searchBoard(targets: List[(Int, Int, String, Set[(Int, Int)])], results: List[String]): List[String] = targets match {
-      case Nil => results
-      case (x, y, word, prev) :: tl => {
-        val char = board(x)(y)
-        val w = word :+ char
-        println(s"cord: ($x, $y), search: $w, prevSet: $prev")
+    def searchBoard(targets: List[(Int, Int, String, Set[(Int, Int)])], results: List[String]): List[String] =
+      targets match {
+        case Nil => results
+        case (x, y, word, prev) :: tl => {
+          val char = board(x)(y)
+          val w = word :+ char
+          println(s"cord: ($x, $y), search: $w, prevSet: $prev")
 
-        val newResult = if (trie.search(w)) {
-          trie.remove(w)
-          w :: results
-        } else results
+          val newResult = if (trie.search(w)) {
+            trie.remove(w)
+            w :: results
+          } else results
 
-        val newTargets = if (trie.prefix(w)) {
-          val cordinates = Seq((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
-            .filterNot(prev.contains)
-            .filter { case (x, y) => x >= 0 && y >= 0 && x < board.size && y < board.head.size }
-          val newChecks = cordinates.map { case (i, j) => (i, j, w, prev + ((x, y))) }
-          newChecks.toList ++ tl
-        } else tl
+          val newTargets = if (trie.prefix(w)) {
+            val cordinates = Seq((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1))
+              .filterNot(prev.contains)
+              .filter { case (x, y) => x >= 0 && y >= 0 && x < board.size && y < board.head.size }
+            val newChecks = cordinates.map { case (i, j) => (i, j, w, prev + ((x, y))) }
+            newChecks.toList ++ tl
+          } else tl
 
-        searchBoard(newTargets, newResult)
+          searchBoard(newTargets, newResult)
+        }
       }
-    }
 
     val res = for {
       x <- board.indices
@@ -91,7 +92,12 @@ object Solution {
   }
 
   def main(args: Array[String]) = {
-    println(findWords(Array('o','a','a','n','e','t','a','e','i','h','k','r','i','f','l','v').grouped(4).toArray, Array("oath","pea","eat","rain")))
+    println(
+      findWords(
+        Array('o', 'a', 'a', 'n', 'e', 't', 'a', 'e', 'i', 'h', 'k', 'r', 'i', 'f', 'l', 'v').grouped(4).toArray,
+        Array("oath", "pea", "eat", "rain")
+      )
+    )
     println(findWords(Array('a', 'a').grouped(2).toArray, Array("aaa")))
 
   }

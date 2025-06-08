@@ -38,7 +38,7 @@ object Solution {
     }
     // extract new list
     tailrecM(root) {
-      case null => None
+      case null                            => None
       case current if current.next == null => None
       case current =>
         val next = current.next.next

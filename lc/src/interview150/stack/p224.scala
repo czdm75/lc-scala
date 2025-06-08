@@ -34,7 +34,7 @@ object Solution {
       case (stack, Left(op) :: tl) => Left(Left(op) :: stack, tl)
       case (stack, Right(n) :: tl) => Left(Right(n) :: stack, tl)
       // illegal
-      case (stack, input)          => throw new IllegalStateException()
+      case (stack, input) => throw new IllegalStateException()
     }
   }
 

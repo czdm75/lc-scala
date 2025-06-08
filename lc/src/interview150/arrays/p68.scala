@@ -6,8 +6,7 @@ object Solution {
       words.foldLeft[(Int, List[String], List[(Int, List[String])])](
         (0, Nil, Nil)
       ) {
-        case ((n, line, packed), word)
-            if (n + line.length + word.length) > maxWidth =>
+        case ((n, line, packed), word) if (n + line.length + word.length) > maxWidth =>
           (word.length, List(word), (n, line.reverse) :: packed)
         case ((n, line, packed), word) =>
           (n + word.length, word :: line, packed)
