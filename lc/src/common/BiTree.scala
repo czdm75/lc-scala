@@ -29,9 +29,11 @@ trait RecursiveConcatTraverse[T, Self <: RecursiveConcatTraverse[T, Self]] exten
 
   def postfixTraverse: Seq[T] = foldTree(List.empty[T]) { case (elem, left, right) => left ++ right ++ List(elem) }
 
-  def breadthFirstTraverse: Seq[T] = foldTree(List.empty[List[T]]) { case (elem, left, right) =>
+  def breadthFirstTraverse: Seq[T] = layersTraverse.flatten
+
+  def layersTraverse: Seq[Seq[T]] = foldTree(List.empty[List[T]]) { case (elem, left, right) =>
     List(elem) :: left.zipAll(right, List.empty[T], List.empty[T]).map(_ ++ _)
-  }.flatten
+  }
 }
 
 trait RecursiveTraverse[T, Self <: RecursiveTraverse[T, Self]] extends BiTree[T, Self] {
@@ -133,4 +135,48 @@ object ListTraverse {
       case (TRight, hd) :: tl => postfixTraverse(hd.rightChild.map((TLeft, _)) ?:: tl, result)
       case (TSelf, hd) :: tl  => postfixTraverse(tl, hd.element :: result)
     }
+}
+
+trait FoldTraverse[T, Self <: FoldTraverse[T, Self]] extends BiTree[T, Self] {
+  self: Self =>
+}
+
+abstract class NodeBasedBiTree[T, Self <: NodeBasedBiTree[T, Self]](
+    element: T,
+    leftChild: Option[Self],
+    rightChild: Option[Self]
+) extends BiTree[T, Self] {
+  self: Self =>
+}
+
+trait Factory[T, Self <: ArrayBasedBiTree[T, Self]] {
+  def create(array: IndexedSeq[T], index: Int): Self
+}
+
+abstract class ArrayBasedBiTree[T, Self <: ArrayBasedBiTree[T, Self]](
+    array: IndexedSeq[T],
+    index: Int
+)(using factory: Factory[T, Self])
+    extends BiTree[T, Self] {
+  self: Self =>
+  def element: T = array(index)
+  def leftChild: Option[Self] = Some(2 * index + 1).filter(_ < array.size).map(factory.create(array, _))
+  def rightChild: Option[Self] = Some(2 * index + 2).filter(_ < array.size).map(factory.create(array, _))
+}
+
+case class NodeBiTree[T](
+    element: T,
+    leftChild: Option[NodeBiTree[T]],
+    rightChild: Option[NodeBiTree[T]]
+) extends NodeBasedBiTree[T, NodeBiTree[T]](element, leftChild, rightChild)
+    with ListTraverse[T, NodeBiTree[T]]
+
+case class ArrayBiTree[T](
+    array: IndexedSeq[T],
+    index: Int
+) extends ArrayBasedBiTree[T, ArrayBiTree[T]](array, index)
+    with ListTraverse[T, ArrayBiTree[T]]
+
+given [T]: Factory[T, ArrayBiTree[T]] with {
+  def create(array: IndexedSeq[T], index: Int): ArrayBiTree[T] = ArrayBiTree(array, index)
 }
